@@ -1,4 +1,4 @@
-import { AxesHelper, Color, GridHelper, Scene } from "three";
+import { AxesHelper, Box3, Color, GridHelper, Scene, Vector3 } from "three";
 export class SceneManager {
     constructor() {
         this.models = new Map();
@@ -20,17 +20,36 @@ export class SceneManager {
         const model = this.models.get(name);
         if (!model)
             return;
-        model.position.set(x, y, z);
+        const bounds = new Box3().setFromObject(model);
+        if (bounds.isEmpty())
+            return;
+        const currentCenter = bounds.getCenter(new Vector3());
+        const targetCenter = new Vector3(x, y, z);
+        model.position.add(targetCenter.sub(currentCenter));
+        model.updateMatrixWorld(true);
     }
     applyZUpToYUp(name) {
         const model = this.models.get(name);
         if (!model)
             return;
+        const beforeBounds = new Box3().setFromObject(model);
+        if (beforeBounds.isEmpty())
+            return;
+        const beforeCenter = beforeBounds.getCenter(new Vector3());
         model.rotation.x = -Math.PI / 2;
+        model.updateMatrixWorld(true);
+        const afterCenter = new Box3().setFromObject(model).getCenter(new Vector3());
+        model.position.add(beforeCenter.sub(afterCenter));
+        model.updateMatrixWorld(true);
     }
     getModelPosition(name) {
         const model = this.models.get(name);
-        return model ? model.position.clone() : null;
+        if (!model)
+            return null;
+        const bounds = new Box3().setFromObject(model);
+        if (bounds.isEmpty())
+            return model.position.clone();
+        return bounds.getCenter(new Vector3());
     }
     addSpatialHelpers() {
         const grid = new GridHelper(2000, 20);

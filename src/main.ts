@@ -11,7 +11,12 @@ function createCanvas(container: HTMLElement): HTMLCanvasElement {
 	return canvas;
 }
 
-function createControls(container: HTMLElement, sceneManager: SceneManager, modelNames: string[]): void {
+function createControls(
+	container: HTMLElement,
+	sceneManager: SceneManager,
+	cameraController: CameraController,
+	modelNames: string[]
+): void {
 	const panel = document.createElement("div");
 	panel.className = "viewer-controls";
 
@@ -77,6 +82,52 @@ function createControls(container: HTMLElement, sceneManager: SceneManager, mode
 		panel.appendChild(card);
 	}
 
+	const cameraCard = document.createElement("div");
+	cameraCard.className = "viewer-controls-card";
+
+	const cameraTitle = document.createElement("h3");
+	cameraTitle.textContent = "camera";
+
+	const camXInput = document.createElement("input");
+	camXInput.type = "number";
+	camXInput.step = "0.1";
+	camXInput.placeholder = "x";
+
+	const camYInput = document.createElement("input");
+	camYInput.type = "number";
+	camYInput.step = "0.1";
+	camYInput.placeholder = "y";
+
+	const camZInput = document.createElement("input");
+	camZInput.type = "number";
+	camZInput.step = "0.1";
+	camZInput.placeholder = "z";
+
+	camXInput.value = cameraController.camera.position.x.toFixed(2);
+	camYInput.value = cameraController.camera.position.y.toFixed(2);
+	camZInput.value = cameraController.camera.position.z.toFixed(2);
+
+	const cameraPositionRow = document.createElement("div");
+	cameraPositionRow.className = "viewer-controls-row";
+	cameraPositionRow.append(camXInput, camYInput, camZInput);
+
+	const setCameraButton = document.createElement("button");
+	setCameraButton.textContent = "Set Camera Position";
+	setCameraButton.addEventListener("click", () => {
+		const x = Number(camXInput.value || 0);
+		const y = Number(camYInput.value || 0);
+		const z = Number(camZInput.value || 0);
+		cameraController.camera.position.set(x, y, z);
+		cameraController.controls.update();
+	});
+
+	const cameraActionsRow = document.createElement("div");
+	cameraActionsRow.className = "viewer-controls-row";
+	cameraActionsRow.append(setCameraButton);
+
+	cameraCard.append(cameraTitle, cameraPositionRow, cameraActionsRow);
+	panel.appendChild(cameraCard);
+
 	container.appendChild(panel);
 }
 
@@ -97,9 +148,17 @@ async function bootstrap(): Promise<void> {
 		loader.load("./assets/models/RSE_7021ea73-8340-441a-b6a5-24a95a5b2a78.obj")
 	]);
 
+	// Keep both models near the world origin while preserving their relative spacing.
+	const initialBounds = new Box3().setFromObject(modelA).union(new Box3().setFromObject(modelB));
+	if (!initialBounds.isEmpty()) {
+		const center = initialBounds.getCenter(new Vector3());
+		modelA.position.sub(center);
+		modelB.position.sub(center);
+	}
+
 	sceneManager.addModel("modelA", modelA);
 	sceneManager.addModel("modelB", modelB);
-	createControls(app, sceneManager, ["modelA", "modelB"]);
+	createControls(app, sceneManager, cameraController, ["modelA", "modelB"]);
 
 	const bounds = new Box3().setFromObject(modelA).union(new Box3().setFromObject(modelB));
 	if (!bounds.isEmpty()) {
