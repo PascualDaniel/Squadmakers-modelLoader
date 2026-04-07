@@ -6,10 +6,70 @@ body {
 }
 
 #app {
+  position: relative;
   width: 100%;
   height: 100%;
 }
 
 canvas {
   display: block;
+}
+
+.viewer-controls {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+  width: min(520px, calc(100% - 24px));
+  display: grid;
+  gap: 10px;
+}
+
+.viewer-controls-card {
+  background: rgba(20, 24, 30, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  padding: 10px;
+  color: #f3f6fb;
+  backdrop-filter: blur(4px);
+}
+
+.viewer-controls-card h3 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-family: ui-sans-serif, "Segoe UI", sans-serif;
+}
+
+.viewer-controls-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.viewer-controls input,
+.viewer-controls button {
+  font: 13px/1.2 ui-sans-serif, "Segoe UI", sans-serif;
+}
+
+.viewer-controls input {
+  width: 90px;
+  padding: 6px;
+  border-radius: 6px;
+  border: 1px solid #4f5f76;
+  background: #131922;
+  color: #f3f6fb;
+}
+
+.viewer-controls button {
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #5f7798;
+  background: #2b3b53;
+  color: #f3f6fb;
+  cursor: pointer;
+}
+
+.viewer-controls button:hover {
+  background: #345075;
 }
