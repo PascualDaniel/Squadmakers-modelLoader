@@ -86,7 +86,7 @@ function createControls(
 	cameraCard.className = "viewer-controls-card";
 
 	const cameraTitle = document.createElement("h3");
-	cameraTitle.textContent = "camera";
+	cameraTitle.textContent = "Camera";
 
 	const camXInput = document.createElement("input");
 	camXInput.type = "number";
@@ -148,7 +148,6 @@ async function bootstrap(): Promise<void> {
 		loader.load("./assets/models/RSE_7021ea73-8340-441a-b6a5-24a95a5b2a78.obj")
 	]);
 
-	// Keep both models near the world origin while preserving their relative spacing.
 	const initialBounds = new Box3().setFromObject(modelA).union(new Box3().setFromObject(modelB));
 	if (!initialBounds.isEmpty()) {
 		const center = initialBounds.getCenter(new Vector3());
@@ -156,9 +155,9 @@ async function bootstrap(): Promise<void> {
 		modelB.position.sub(center);
 	}
 
-	sceneManager.addModel("modelA", modelA);
-	sceneManager.addModel("modelB", modelB);
-	createControls(app, sceneManager, cameraController, ["modelA", "modelB"]);
+	sceneManager.addModel("Modelo 1", modelA);
+	sceneManager.addModel("Modelo 2", modelB);
+	createControls(app, sceneManager, cameraController, ["Modelo 1", "Modelo 2"]);
 
 	const bounds = new Box3().setFromObject(modelA).union(new Box3().setFromObject(modelB));
 	if (!bounds.isEmpty()) {
