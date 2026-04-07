@@ -157,7 +157,11 @@ async function bootstrap(): Promise<void> {
 
 	sceneManager.addModel("Modelo 1", modelA);
 	sceneManager.addModel("Modelo 2", modelB);
+	sceneManager.applyZUpToYUp("Modelo 1");
+	sceneManager.applyZUpToYUp("Modelo 2");
 	createControls(app, sceneManager, cameraController, ["Modelo 1", "Modelo 2"]);
+	
+	
 
 	const bounds = new Box3().setFromObject(modelA).union(new Box3().setFromObject(modelB));
 	if (!bounds.isEmpty()) {
