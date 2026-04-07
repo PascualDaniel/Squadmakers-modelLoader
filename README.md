@@ -6,9 +6,12 @@ Visor que cargua dos OBJ y los representa en una escena 3D.
 
 ## Features
 
+	Se pueden Mover los modelos
+	Se pueden hacer visibles o invisibles
+	Se pueden normalizar y se inicializan bien TODO	
 
 
-## Etructura
+## Estructura
 
 - `src/core/SceneManager.ts`
 - `src/core/CameraController.ts`
