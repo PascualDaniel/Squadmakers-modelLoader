@@ -10,6 +10,11 @@ Visor que cargua dos OBJ y los representa en una escena 3D.
 	Se pueden hacer visibles o invisibles
 	Se pueden normalizar y se inicializan bien TODO	
 
+## Parte técnica
+
+- Los modelos se centran al origen para evitar problemas de precisión y se usa logarithmicDepthBuffer.
+- Se corrige la orientación del objeto si es necesario (si no esta en 0.0).
+- 
 
 ## Estructura
 
@@ -30,7 +35,7 @@ npm run build
 npm run serve
 ```
 ```
-Available on:
+Abre el navegador en:
   http://10.8.0.6:8080
   http://192.168.1.128:8080
   http://127.0.0.1:8080
