@@ -1,19 +1,14 @@
 # Squadmakers-modelLoader
 
-Minimal Three.js OBJ viewer built with TypeScript (no Vite, no bundler).
+Visor que cargua dos OBJ y los representa en una escena 3D.
+
+
 
 ## Features
 
-- Modular architecture: Scene, Camera/Controls, Renderer, Lights, OBJ loader
-- Loads two OBJ models into the same scene
-- OrbitControls navigation
-- AxesHelper and GridHelper for spatial reference
-- Model utility functions:
-	- toggle visibility
-	- set x/y/z position
-	- apply Z-up to Y-up rotation fix
 
-## Structure
+
+## Etructura
 
 - `src/core/SceneManager.ts`
 - `src/core/CameraController.ts`
