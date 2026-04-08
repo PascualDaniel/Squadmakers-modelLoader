@@ -98,7 +98,48 @@ function createControls(container, sceneManager, cameraController, modelNames) {
     cameraActionsRow.append(setCameraButton);
     cameraCard.append(cameraTitle, cameraPositionRow, cameraActionsRow);
     panel.appendChild(cameraCard);
+    const markerCard = document.createElement("div");
+    markerCard.className = "viewer-controls-card";
+    const markerTitle = document.createElement("h3");
+    markerTitle.textContent = "Marker Cube";
+    const markerXInput = document.createElement("input");
+    markerXInput.type = "number";
+    markerXInput.step = "0.1";
+    markerXInput.placeholder = "x";
+    markerXInput.value = "0";
+    const markerYInput = document.createElement("input");
+    markerYInput.type = "number";
+    markerYInput.step = "0.1";
+    markerYInput.placeholder = "y";
+    markerYInput.value = "0";
+    const markerZInput = document.createElement("input");
+    markerZInput.type = "number";
+    markerZInput.step = "0.1";
+    markerZInput.placeholder = "z";
+    markerZInput.value = "0";
+    const markerPositionRow = document.createElement("div");
+    markerPositionRow.className = "viewer-controls-row";
+    markerPositionRow.append(markerXInput, markerYInput, markerZInput);
+    const setMarkerButton = document.createElement("button");
+    setMarkerButton.textContent = "Set Marker Position";
+    setMarkerButton.addEventListener("click", () => {
+        const x = Number(markerXInput.value || 0);
+        const y = Number(markerYInput.value || 0);
+        const z = Number(markerZInput.value || 0);
+        sceneManager.setMarkerPosition(x, y, z);
+    });
+    const markerActionsRow = document.createElement("div");
+    markerActionsRow.className = "viewer-controls-row";
+    markerActionsRow.append(setMarkerButton);
+    markerCard.append(markerTitle, markerPositionRow, markerActionsRow);
+    panel.appendChild(markerCard);
     container.appendChild(panel);
+}
+function createCameraPositionOverlay(container) {
+    const overlay = document.createElement("div");
+    overlay.className = "camera-position-overlay";
+    container.appendChild(overlay);
+    return overlay;
 }
 async function bootstrap() {
     const app = document.getElementById("app");
@@ -125,6 +166,7 @@ async function bootstrap() {
     sceneManager.applyZUpToYUp("Modelo 1");
     sceneManager.applyZUpToYUp("Modelo 2");
     createControls(app, sceneManager, cameraController, ["Modelo 1", "Modelo 2"]);
+    const cameraPositionOverlay = createCameraPositionOverlay(app);
     const bounds = new Box3().setFromObject(modelA).union(new Box3().setFromObject(modelB));
     if (!bounds.isEmpty()) {
         const center = bounds.getCenter(new Vector3());
@@ -143,6 +185,8 @@ async function bootstrap() {
     const animate = () => {
         requestAnimationFrame(animate);
         cameraController.controls.update();
+        const position = cameraController.camera.position;
+        cameraPositionOverlay.textContent = `Camera: X ${position.x.toFixed(2)}  Y ${position.y.toFixed(2)}  Z ${position.z.toFixed(2)}`;
         renderer.renderer.render(sceneManager.scene, cameraController.camera);
     };
     animate();

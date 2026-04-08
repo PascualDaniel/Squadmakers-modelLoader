@@ -1,13 +1,20 @@
-import { AxesHelper, Box3, Color, GridHelper, Group, Scene, Vector3 } from "three";
+import { AxesHelper, Box3, BoxGeometry, Color, GridHelper, Group, Mesh, MeshStandardMaterial, Scene, Vector3 } from "three";
 
 export class SceneManager {
 	public readonly scene: Scene;
 	private readonly models = new Map<string, Group>();
+	private readonly marker: Mesh;
 
 	constructor() {
 		this.scene = new Scene();
 		this.scene.background = new Color("#1c1f24");
 		this.addSpatialHelpers();
+		this.marker = this.createMarker();
+		this.scene.add(this.marker);
+	}
+
+	setMarkerPosition(x: number, y: number, z: number): void {
+		this.marker.position.set(x, y, z);
 	}
 
 	addModel(name: string, model: Group): void {
@@ -64,6 +71,19 @@ export class SceneManager {
 		const axes = new AxesHelper(500);
 		this.scene.add(grid);
 		this.scene.add(axes);
+	}
+
+	private createMarker(): Mesh {
+		const geometry = new BoxGeometry(20, 20, 20);
+		const material = new MeshStandardMaterial({
+			color: "#ff5a1f",
+			emissive: "#ff5a1f",
+			emissiveIntensity: 0.4
+		});
+
+		const marker = new Mesh(geometry, material);
+		marker.name = "position-marker";
+		return marker;
 	}
 }
 

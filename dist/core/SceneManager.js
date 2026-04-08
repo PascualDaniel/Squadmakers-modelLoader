@@ -1,10 +1,15 @@
-import { AxesHelper, Box3, Color, GridHelper, Scene, Vector3 } from "three";
+import { AxesHelper, Box3, BoxGeometry, Color, GridHelper, Mesh, MeshStandardMaterial, Scene, Vector3 } from "three";
 export class SceneManager {
     constructor() {
         this.models = new Map();
         this.scene = new Scene();
         this.scene.background = new Color("#1c1f24");
         this.addSpatialHelpers();
+        this.marker = this.createMarker();
+        this.scene.add(this.marker);
+    }
+    setMarkerPosition(x, y, z) {
+        this.marker.position.set(x, y, z);
     }
     addModel(name, model) {
         this.models.set(name, model);
@@ -56,5 +61,16 @@ export class SceneManager {
         const axes = new AxesHelper(500);
         this.scene.add(grid);
         this.scene.add(axes);
+    }
+    createMarker() {
+        const geometry = new BoxGeometry(20, 20, 20);
+        const material = new MeshStandardMaterial({
+            color: "#ff5a1f",
+            emissive: "#ff5a1f",
+            emissiveIntensity: 0.4
+        });
+        const marker = new Mesh(geometry, material);
+        marker.name = "position-marker";
+        return marker;
     }
 }
